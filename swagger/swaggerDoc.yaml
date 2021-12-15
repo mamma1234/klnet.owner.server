@@ -1,0 +1,529 @@
+
+  
+
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+ - basicAuth: []
+
+tags:
+  - name: Schedule
+    description: "Schedule"
+  - name: Tracking
+    description: "Tracking"
+  - name: DemDet
+    description: "Demurrage & Detention"
+
+paths:
+
+  /api/apiSchedule:
+    get:
+      summary: API Schedule
+      descrpition: API Schedule
+      tags: [Schedule]
+      security:
+        - basicAuth: []
+
+      parameters:
+        - name: carrierCode
+          in: query
+          description: LINE CODE
+          type: string
+          example: 'CMA'
+          minLength: 3
+          maxLength: 8
+        - name: datafrom
+          in: query
+          type: date
+          description: start date
+          format: date
+          example: '20200203'
+          pattern: "YYYYMMDD"
+          minLength: 8
+          maxLength: 8
+        - name: datato
+          in: query
+          type: date
+          description: end date
+          format: date
+          example: '20200203'
+          pattern: "YYYYMMDD"
+          minLength: 8
+          maxLength: 8  
+      responses:
+        "200":
+          description: SUCCESS
+          $ref: "#/definitions/getScheduleData"
+        "401":
+          description: UnauthorizedError
+          $ref: "#/definitions/UnauthorizedError"
+      default:
+        description: Error           
+  /loc/getTrackingList:
+    post:
+      summary: Tracking API
+      descrpition: Tracking
+      tags: [Tracking]
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+            examples:
+              IMPORT:
+                value: {"ietype":"I" ,"line":"","blbk":"","start":"","end":"","num":1}
+              EXPORT:
+                value: {"ietype":"E","line":"","blbk":"","start":"","end":"","num":1}
+              ALL:
+                value: {"ietype":"A","line":"","blbk":"","start":"","end":"","num":1}  
+       
+      responses:
+        "200":
+          description: SUCCESS
+          $ref: "#/definitions/TrackingResult"
+        "401":
+          description: UnauthorizedError
+          $ref: "#/definitions/UnauthorizedError"
+      default:
+        description: Error     
+  /loc/getDemDetList:
+    post:
+      summary: DemDet API
+      description: Demurrage Detention
+      tags: [DemDet]
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                parameter:
+                  value: {"lineCode":"" ,"mblNo":"","ieType":"","cntrNo":"","num":1, "onlyChecked":false}
+      responses:
+        "200":
+          description: SUCCESS
+          $ref: "#/definitions/DemDetResult"
+        "401":
+          description: UnauthorizedError
+          $ref: "#/definitions/UnauthorizedError"
+      default:
+        description: Error
+definitions:
+  getScheduleData:
+    description: Success Request
+    headers:
+      line_code:
+        schema:
+          type: string
+        description: CARRIER CODE
+
+      vesssel_name:
+        schema:
+          type: string
+        description: VESSEL NAME
+
+      voyage_no:
+        schema:
+          type: string
+        description: VOYAGE
+
+      call_sign:
+        schema:
+          type: string
+        description: CALL SIGN
+      route_seq:
+        schema:
+          type: string
+        description: SEQ
+      route_code:
+        schema:
+          type: string
+        description: ROUTE CODE
+
+      pol:
+        schema:
+          type: string
+        description: POL
+
+      eta:
+        schema:
+          type: string
+        description: ETA
+
+      etb:
+        schema:
+          type: string
+        description: ETB
+
+      etd:
+        schema:
+          type: string
+        description: ETD
+
+      calling_port:
+        schema:
+          type: string
+        description: CALLING PORT
+
+      calling_eta:
+        schema:
+          type: string
+        description: CALLING ETA
+        
+      calling_etd:
+        schema:
+          type: string
+        description: CALLING ETD
+  UnauthorizedError:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            errorcode:
+              type: string
+              description: error code
+            error:
+              type: string
+              description: error message
+    description: API key is missing or invalid
+  TrackingResult:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            req_seq:
+              type: string
+              description: Seq
+            user_no:
+              type: string
+              description: User  
+            carrier_code:
+              type: string
+              description: Carrier
+            bl_bkg:
+              type: string
+              description: B/L No | B/K No
+            ie_type:
+              type: string
+              description: IMPORT & EXPORT
+            cntr_no:
+              type: string
+              description: Container No
+            mbl_no:
+              type: string
+              description: Master B/L
+            bkg_no:
+              type: string
+              description: Booking No.
+            bl_yy:
+              type: string
+              description: BL year
+            web_seq:
+              type: string
+              description: Scrap Seq
+            book_mark:
+              type: string
+              description: Bookmark Flag
+            vsl_code:
+              type: string
+              description: Ship Code
+            vsl_name:
+              type: string
+              description: Ship Name
+            voyage:
+              type: string
+              description: voyage
+            pol:
+              type: string
+              description: POL
+            pod:
+              type: string
+              description: POD
+            pol_cd:
+              type: string
+              description: POL Port Code
+            pod_cd:
+              type: string
+              description: POD Port Code
+            pol_atd:
+              type: string
+              description: POL Arrival
+            pol_etd:
+              type: string
+              description: POL Estimated Time of Departure
+            start_db:
+              type: string
+              description: start_db
+            start_day:
+              type: string
+              description: start day
+            start_cnt:
+              type: string
+              description: start_cnt
+            end_db:
+              type: string
+              description: end_db
+            end_day:
+              type: string
+              description: end_day
+            end_cnt:
+              type: string
+              description: end_cnt
+            view_bl_bkg:
+              type: string
+              description: view_bl_bkg
+            image_yn: 
+              type: string
+              description: Carrier Image Flag
+            line_code:
+              type: string
+              description: Carrier Code
+            line_nm:
+              type: string
+              description: Carrier Name
+            line_url:
+              type: string
+              description: Carrier HomePage
+            last_status:
+              type: string
+              description: lastStatus
+            last_status_time:
+              type: string
+              description: lastStatusName
+            totalcnt:
+              type: string
+              description: totalcnt
+            full_out:
+              type: string
+              description: FullOut
+            mt_out:
+              type: string
+              description: EmptyOut
+            full_in:
+              type: string
+              description: FullIn
+            tot_page:
+              type: integer
+              description: Total Page
+            curpage:
+              type: integer
+              description: Page
+            tot_cnt:
+              type: string
+              description: Total Count
+  DemDetResult:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            req_seq:
+              type: string
+              description: Seq
+            line_code:
+              type: string
+              description: Carrier Code
+            ie_type:
+              type: string
+              description: Import & Export
+            bl_bkg:
+              type: string
+              description: BL No | Booking No
+            cntr_no:
+              type: string
+              description: Container No.
+            type_size:
+              type: string
+              description: Container Type
+            mbl_no:
+              type: string
+              description: Master BL No
+            hbl_no:
+              type: string
+              description: House BL No
+            bkg_no:
+              type: string
+              description: Booking No
+            vsl_code:
+              type: string
+              description: Ship Code
+            vsl_name:
+              type: string
+              description: Ship Name
+            voyage:
+              type: string
+              description: voyage
+            ter_ref_no:
+              type: string
+              description: ter_ref_no
+            pol:
+              type: string
+              description: POL Port Code
+            pod:
+              type: string
+              description: POD Port Code
+            eta:
+              type: string
+              description: ETA
+            eta_time:
+              type: string
+              description: ETA TIME(hh:ss)
+            etd:
+              type: string
+              description: ETD
+            etd_time:
+              type: string
+              description: ETD TIME(hh:ss)
+            ata:
+              type: string
+              description: ATA
+            ata_time:
+              type: string
+              description: ATA TIME(hh:ss)
+            atd:
+              type: string
+              description: ATD
+            atd_time:
+              type: string
+              description: ATD TIME(hh:ss)
+            unloading_date:
+              type: string
+              description: Unload(yyyy-mm-dd)
+            loading_date:
+              type: string
+              description: Load(yyyy-mm-dd)
+            full_outgate_date:
+              type: string
+              description: Full Container Gate Out (yyyy-mm-dd)
+            full_ingate_date:
+              type: string
+              description: Full Container Gate In (yyyy-mm-dd)
+            mt_outgate_date:
+              type: string
+              description: Empty Container Gate Out(yyyy-mm-dd)
+            mt_ingate_date:
+              type: string
+              description: Empty Container Gate In(yyyy-mm-dd)
+            ret_date:
+              type: string
+              description: ret_date
+            dem_date: 
+              type: string
+              description: dem_date
+            osc_date: 
+              type: string
+              description: dsc_date
+            dem_amount:
+              type: string
+              description: Demurrage Amount
+            dem_vat:
+              type: string
+              description: Demurrage Vat
+            dem_unit: 
+              type: string
+              description: Demurrage Unit
+            det_amount: 
+              type: string
+              description: Detention Amount
+            det_vat: 
+              type: string
+              description: Detention Vat
+            det_unit: 
+              type: string
+              description: Detention Unit
+            combin_amount: 
+              type: string
+              description: Combine Amount
+            combin_vat: 
+              type: string
+              description: Combine Vat
+            combin_unit: 
+              type: string
+              description: Combine Unit
+            osc_amount: 
+              type: string
+              description: Osc Amount
+            osc_vat: 
+              type: string
+              description: Osc Vat
+            osc_unit: 
+              type: string
+              description: Osc Unit
+            tracking_remark: 
+              type: string
+              description: Tracking Remark
+            tracking_yn:
+              type: string
+              description: Tracking Flag
+            dem_det_remark:
+              type: string
+              description: Dem Det Remark
+            dem_det_yn: 
+              type: string
+              description: Dem Det Flag
+            dem_tariff: 
+              type: string
+              description: Demurrage Tariff
+            det_tariff: 
+              type: string
+              description: Det Tariff
+            osc_tariff: 
+              type: string
+              description: Osc Tariff
+            img_line_code: 
+              type: string
+              description: Carrier Logo
+            image_yn: 
+              type: string
+              description: Carrier Logo Flag
+            line_url: 
+              type: string
+              description: Carrier Home Page
+            unload_terminal: 
+              type: string
+              description: Unload Terminal Code
+            terminal_kname:
+              type: string
+              description: Terminal Name
+            cntr_status: 
+              type: string
+              description: Container State
+            tracking_voyage: 
+              type: string
+              description: Voyage
+            dem_over_day: 
+              type: string
+              description: Dem Over day
+            det_over_day: 
+              type: string
+              description: Det Over day
+            osc_over_day: 
+              type: string
+              description: Osc over day
+            do_url: 
+              type: string
+              description: Do Location Url
+            do_yn: 
+              type: string
+              description: Do Flag
+            curpage: 
+              type: integer
+              description: Paging  
+                    
+                    
+

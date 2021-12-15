@@ -1,0 +1,96 @@
+node 설치
+
+yarn 설치
+
+yarn install
+
+yarn add nodemon
+
+/*
+yarn add sqlite3
+yarn add oracledb
+yarn add pg
+yarn add md5
+*/
+
+cd material-react-mobx
+
+yarn install
+
+/*
+yarn add cookie-parser cookie-session express-session morgan connect-flash pug
+
+yarn add dotenv
+
+yarn add passport passport-local passport-facebook passport-kakao passport-naver passport-google-oauth20
+
+yarn add passport-daum-oauth2 passport-twitter-oauth2 passport-cognito-oauth2 passport-instagram passport-linkedin-oauth2
+*/
+
+/*
+https://github.com/kelektiv/node.bcrypt.js/wiki/Installation-Instructions
+
+//administrator 로 설치해야 함
+npm install --global --production windows-build-tools
+
+yarn add bcrypt
+*/
+
+
+
+/*
+sudo systemctl start docker
+sudo systemctl enable docker
+
+docker build -t klnet.owner.node .
+docker build -t klnet.owner.web .
+
+docker run -p 5000:5000 -d klnet.owner.node --name server
+docker run -p 80:3000 -d klnet.owner.web
+
+docker run -p 80:80 -d klnet.owner.web --link practical_lovelace
+
+docker run -p 80:80 -d klnet.owner.web
+
+docker logs -f 
+
+
+docker run -d --name "server" -p 5000:5000 klnet.owner.node
+docker run -d --name "client" -p 80:80 --link server klnet.owner.web 
+
+docker run -d -it --rm --name "server1" -p 5001:5000 -v /KLNET/OWNER:/OWNER klnet.owner.node
+docker run -d -it --rm --name "server2" -p 5002:5000 -v /KLNET/OWNER:/OWNER klnet.owner.node
+docker run -d -it --rm --name "client" -p 80:80 -v /KLNET/OWNER:/OWNER --link server1:server1 --link server2:server2 klnet.owner.web 
+
+
+sudo systemctl start firewalld.service
+
+systemctl status firewalld.service
+*/
+
+/*
+docker network create server
+
+--network server
+
+- 외부 확인 
+-- 서버 확인
+http://172.25.1.89:5001/auth/getTestQuerySample
+-- 웹->서버 확인
+http://172.25.1.89/auth/getTestQuerySample
+-- url 확인
+https://www.plismplus.com/auth/getTestQuerySample
+*/
+
+
+
+/*
+portainer (admin/admin1234)
+http://172.25.1.89:9000/#/auth
+
+kibana
+http://172.25.1.89:5601/app/kibana
+
+elasticsearch
+http://172.25.1.89:9200/imo/_search
+*/
